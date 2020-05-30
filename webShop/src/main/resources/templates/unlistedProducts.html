@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Product</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name">Bob</span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAnonymous()">
+		<button type="button" onclick="window.location.href = '/login';">Login</button>
+	</div>
+	<div sec:authorize="isAuthenticated()" th:object="${product}">
+		<p th:unless="${product.isEnabled()}">Product not finalized</p>
+		<form method="POST" enctype="multipart/form-data"
+			th:action="@{/picture/product/upload/__${product.getId()}__}">
+			<table>
+				<tr>
+					<td>Id:</td>
+					<td><label th:text="*{id}"></label></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td><label th:text="*{name}"></label></td>
+				</tr>
+				<tr>
+					<td>Category:</td>
+					<td><label th:text="*{category}"></label></td>
+				</tr>
+				<tr>
+					<td>Cost:</td>
+					<td><label th:text="|*{cost} ${session.currency}|"></label></td>
+				</tr>
+				<tr>
+					<td>Number Available:</td>
+					<td><label th:text="*{numberAvailable}"></label></td>
+				</tr>
+				<tr>
+					<td>City Name:</td>
+					<td><label th:text="*{city.name}"></label></td>
+					<td>City zip code:</td>
+					<td><label th:text="*{city.zipCode}"></label></td>
+				</tr>
+				<tr>
+					<td>Country</td>
+					<td><label th:text="*{city.country.countryName}"></label>
+				</tr>
+				<tr>
+					<td>Description:</td>
+					<td><label th:text="*{description}"></label></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>Picture to upload:</td>
+					<td><input type="file" name="file" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Upload" /></input></td>
+				</tr>
+			</table>
+		</form>
+		<ul>
+			<li th:each="pic, stats : ${pics}"><img
+				th:alt="|${product.getName()} stats.index|"
+				th:src="@{/product/file/__${pic}__}"></li>
+		</ul>
+		<a th:href="@{/sellerDashboard/unfinishedListings}" th:text="Back"></a>
+	</div>
+</body>
+</html>

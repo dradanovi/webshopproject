@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>New Card</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<div>
+			<table>
+				<tr>
+					<td>Logged user: <span sec:authentication="name">Bob</span>
+					</td>
+					<td><form th:action="@{/logout}" method="post">
+							<input type="submit" value="Sign Out" />
+						</form></td>
+				</tr>
+			</table>
+		</div>
+		<p th:if="${param.cardEmpty}" class="error">Enter card details</p>
+		<div>
+			<form th:action="@{/newCard}" method="POST" name="newCard"
+				th:object="${card_info}">
+				<p>Insert card information</p>
+				<table>
+					<tr>
+						<td>First name:</td>
+						<td><input type="text" name="firstName"
+							placeholder="First name" th:field="*{cardHolderFirstName}" /></td>
+					</tr>
+					<tr>
+						<td>Last name:</td>
+						<td><input type="text" name="lastName"
+							placeholder="Last name" th:field="*{cardHolderLastName}" /></td>
+					</tr>
+					<tr>
+						<td>Card number:</td>
+						<td><input type="text" name="cardNumber"
+							placeholder="card number" th:field="*{cardNumber}" /></td>
+					</tr>
+					<tr>
+						<td>CSC:</td>
+						<td><input type="number" min="100" max="999" name="csc"
+							placeholder="csc" th:field="*{csc}" /></td>
+					</tr>
+					<tr>
+						<td>Expiration date:</td>
+						<td><select th:value="${month}" id="month" name="month"
+							onselect="">
+								<option value="" hidden="">mm</option>
+								<option th:each="mon : ${monthList}"
+									th:value="${mon.getValue()}" th:text="${mon.getValue()}"></option>
+						</select>/<input type="number" min="00" max="99" placeholder="yy" id="year"
+							name="year" th:value="${year}" /></td>
+					</tr>
+					<tr>
+						<td>Card provider:</td>
+						<td><select th:field="*{provider}" id="provider"
+							name="provider" onselect="">
+								<option value="" hidden="">Provider</option>
+								<option th:each="prov : ${providerList}" th:value="${prov}"
+									th:text="${prov}"></option>
+						</select></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Save" /></td>
+						<td><button type="button"
+								onclick="window.location.href = '/userSettings';">Back</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

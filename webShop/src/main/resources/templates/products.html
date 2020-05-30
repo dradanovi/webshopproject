@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Product</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name">Bob</span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAnonymous()">
+		<button type="button" onclick="window.location.href = '/login';">Login</button>
+	</div>
+	<div th:object="${product}">
+		<p th:unless="${product.isEnabled()}">Product not finalized</p>
+		<table>
+			<tr>
+				<td>Name</td>
+				<td>Date Published</td>
+				<td>City</td>
+				<td>Country</td>
+				<td>Cost</td>
+				<td>Available</td>
+				<td>Seller</td>
+			</tr>
+			<tr>
+				<td th:text="${product.getName()}"></td>
+				<td th:text="${product.printDate()}"></td>
+				<td
+					th:text="|${product.getCity().getName()}, ${product.getCity().getZipCode()}|" />
+				<td th:text="${product.getCity().getCountry().getCountryName()}" />
+				<td th:text="|${product.getCost()} ${product.getCurrency()}|" />
+				<td th:text="${product.getNumberAvailable()}" />
+				<td><a
+					th:href="@{/profile/1/p(seller=${product.getSeller().getUser().getUsername()})}"
+					th:text="${product.getSeller().getUser().getUsername()}"></a></td>
+				<td th:if="${product.getNumberAvailable() > 0} and ${session.user}"><form
+						th:action="@{/addToCart(listingId=${product.getId()})}"
+						method="POST" name="addToCard">
+						<button type="submit" name="submit" value="submit">Add To
+							Cart</button>
+					</form></td>
+			</tr>
+		</table>
+
+		<th:block th:unless="${product.isEnabled()}">
+			<form method="POST" enctype="multipart/form-data"
+				th:action="@{/picture/product/upload/__${product.getId()}__}">
+				<table>
+					<tr>
+						<td>Picture to upload:</td>
+						<td><input type="file" name="file" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="submit" value="Upload" /></input></td>
+					</tr>
+				</table>
+			</form>
+		</th:block>
+		<ul>
+			<li th:each="pic, stats : ${pics}"><img
+				th:alt="|${product.getName()} stats.index|"
+				th:src="@{/product/file/__${pic}__}"></li>
+		</ul>
+	</div>
+	<div th:if="${reviews.size() != 0}">
+		<table>
+			<tr>
+				<td>Reviews</td>
+			</tr>
+			<tr th:each="review : ${reviews}">
+				<td><a th:href="@{/review/s(review=${review.getId()})}"
+					th:text="${review.getGrade()}"></a></td>
+				<td th:text="${review.getUser().getUsername()}"></td>
+				<td th:text="${review.getMessage()}"></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<a th:href="@{${back}}" th:text="Back"></a>
+	</div>
+</body>
+</html>

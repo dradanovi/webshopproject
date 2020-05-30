@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<div id="navigation" th:fragment="navigation">
+		<div sec:authorize="isAuthenticated()">
+			<table>
+				<tr>
+					<td>Logged user: <span sec:authentication="name"></span>
+					</td>
+					<td><form th:action="@{/logout}" method="post">
+							<input type="submit" value="Sign Out" />
+						</form></td>
+				</tr>
+			</table>
+		</div>
+		<div sec:authorize="isAnonymous()">
+			<button type="button" onclick="window.location.href = '/login';">Login</button>
+		</div>
+		<div sec:authorize="isAuthenticated()">
+			<a th:text="|Cart(__${session.cart.size()}__)|" th:href="@{/cart}"></a>
+			<a th:href="@{/profile/u(user=${session.user})}">Profile</a> <a
+				th:href="@{/userSettings}">Settings</a>
+		</div>
+		<ul>
+			<li><a th:href="@{/listing/1}" th:text="Home"></a></li>
+			<li th:each="category, stats : ${categorymap}"
+				th:with="subcategory=${category.value}"><a
+				th:href="@{/listing/1/c(category=${category.key})}"
+				th:text="${category.key}">Dropdown</a>
+				<ul>
+					<li th:each="sub : ${subcategory}"><a
+						th:href="@{/listing/1/s(subCategory=${sub})}" th:text="${sub}"></a>
+					</li>
+				</ul></li>
+		</ul>
+	</div>
+</body>
+</html>

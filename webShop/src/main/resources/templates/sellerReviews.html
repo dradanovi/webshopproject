@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Reviews</title>
+</head>
+<body>
+	<div th:replace="common :: navigation"></div>
+	<div>
+		<table th:each="review : ${reviews}">
+			<tr>
+				<td>Product:</td>
+				<td><a
+					th:href="@{/product/p(id=${review.getProduct().getId()})}"
+					th:text="${review.getProduct().getName()}"></a></td>
+			</tr>
+			<tr>
+				<td>Rating:</td>
+				<td><a th:href="@{/review/s(review=${review.getId()})}"
+					th:text="${review.getGrade()}"></a></td>
+			</tr>
+			<tr>
+				<td>Review:</td>
+				<td th:text="${review.getMessage()}"></td>
+			</tr>
+			<tr>
+				<td>User:</td>
+				<td><a
+					th:href="@{/profile/u(user=${review.getUser().getUsername()})}"
+					th:text="${review.getUser().getUsername()}"></a></td>
+			</tr><hr>
+		</table>
+	</div>
+
+</body>
+</html>

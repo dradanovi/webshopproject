@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Expenses</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name"></span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAnonymous()">
+		<button type="button" onclick="window.location.href = '/login';">Login</button>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td><th:block th:each="expense : ${expenseMap}"
+						th:with="productList=${expense.key.getProducts()}">
+						<table>
+							<tr>
+								<td th:text="${expense.key.getExpenseNumber()}"></td>
+								<td th:text="|****${expense.key.getCardUsed().getLast4()}|"></td>
+							</tr>
+							<tr>
+								<td th:text="${expense.key.printDateCreated()}">
+								<td><span th:if="${expense.key.datePayed != null}"
+									th:text="${expense.key.printDatePayed()}"></span> <span
+									th:if="${expense.key.datePayed == null}"
+									th:text="'Not finalized'"></span></td>
+							</tr>
+						</table>
+						<hr>
+						<table>
+							<tr th:each="product, stats : ${productList}">
+								<td><a th:text="${product.getName()}"
+									th:href="@{/product/p(id=${product.getId()})}"></a></td>
+								<td th:text="${product.printDate()}"></td>
+								<td th:text="|${product.getCost()} ${product.getCurrency()}|" />
+								<td th:text="${product.getNumberAvailable()}" />
+								<td><a
+									th:href="@{/profile/1/p(seller=${product.getSeller().getUser().getUsername()})}"
+									th:text="${product.getSeller().getUser().getUsername()}"></a></td>
+								<td th:unless="${expense.value.get(stats.index).isEmpty()}"><a
+									th:href="@{/review/s(review=(${expense.value.get(stats.index).getId()}))}"
+									th:text="'Rating: __${expense.value.get(stats.index).getGrade()}__'"></a></td>
+								<td th:if="${expense.value.get(stats.index).isEmpty()}"><a
+									th:href="@{/review/r(product=${product.getId()})}"
+									th:text="'Add Review'"></a></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td></td>
+								<td
+									th:text="|${expense.key.getAmount()} ${expense.key.getCurrency()}|"></td>
+							</tr>
+						</table>
+					</th:block></td>
+			</tr>
+		</table>
+	</div>
+	<button type="button" onclick="window.location.href = '/userSettings';">Back</button>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Profile</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name"></span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAnonymous()">
+		<button type="button" onclick="window.location.href = '/login';">Login</button>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<a th:text="|Cart(__${session.cart.size()}__)|" th:href="@{/cart}"></a>
+	</div>
+	<div th:if="${param.seller}">
+		<ul>
+			<li>User:</li>
+			<li><a th:href="|@{/profile/u(user=${param.seller})}|"
+				th:text="${param.seller}"></a></li>
+		</ul>
+		<ul>
+			<li>Rating:</li>
+			<li><a th:href="@{/review/all/seller(seller=${param.seller})}"
+				th:text="|${seller.getRating()} (${seller.getReviews()})|"></a></li>
+		</ul>
+		<table>
+			<tr>
+				<td>Name</td>
+				<td>Date Published</td>
+				<td>City</td>
+				<td>Country</td>
+				<td>Cost</td>
+				<td>Available</td>
+			</tr>
+			<tr th:each="listing : ${listings}">
+				<td><a th:text="${listing.getName()}"
+					th:href="@{/product/p(id=${listing.getId()})}"></a></td>
+				<td th:text="${listing.printDate()}"></td>
+				<td
+					th:text="|${listing.getCity().getName()}, ${listing.getCity().getZipCode()}|"></td>
+				<td th:text="${listing.getCity().getCountry().getCountryName()}"></td>
+				<td th:text="|${listing.getCost()} ${listing.getCurrency()}|"></td>
+				<td th:text="${listing.getNumberAvailable()}"></td>
+				<td th:if="${session.user !=null}"><form
+						th:action="@{/addToCart(listingId=${listing.getId()})}"
+						method="POST" name="addToCard">
+						<button type="submit" name="submit"
+							value="${window.location.href}">Add To Cart</button>
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div th:if="${param.user}">
+		<ul>
+			<li>Username:</li>
+			<li th:text="${user.getUsername()}"></li>
+			<li th:if="${sellerExists}"><a
+				th:href="@{/profile/1/p(seller=${user.getUsername()})}"
+				th:text="'Seller profile'"></a></li>
+		</ul>
+		<ul>
+			<li>Roles:</li>
+			<li th:each="role : ${user.getRoles()}"
+				th:text=" __${role.getRole()}__ "></li>
+		</ul>
+		<table>
+			<tr>
+				<td>Reviews:</td>
+			</tr>
+			<tr th:each="review : ${reviewList}">
+				<td><a th:text="${review.getGrade()}"
+					th:href="@{/review/s(review=${review.getId()})}"></a></td>
+				<td th:text="${review.getProduct().getName()}">
+				<td th:text="${review.getMessage()}"></td>
+			</tr>
+		</table>
+	</div>
+	<div th:if="${param.seller}">
+		<ul th:if="${pageNums.size()>1}">
+			<li><a th:href="|@{/profile/1/p(seller=${param.seller})}|"
+				th:text="'<<'"></a></li>
+			<li th:each="num : ${pageNums}"><a
+				th:href="|@{/profile/__${num}__/p(seller=${param.seller})}|"
+				th:text="${num}"></a></li>
+			<li><a
+				th:href="|@{/profile/__${lastPage}__/p(seller=${param.seller})}|"
+				th:text="'>>'"></a></li>
+		</ul>
+	</div>
+	<div>
+		<a th:href="@{${back}}" th:text="Back"></a>
+	</div>
+</body>
+</html>

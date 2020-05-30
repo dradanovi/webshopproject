@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "oracle.username",
+    "type": "java.lang.String",
+    "description": "Username required for OracleConfiguration"
+  },
+  {
+    "name": "oracle.password",
+    "type": "java.lang.String",
+    "description": "Password required for OracleConfiguration"
+  },
+  {
+    "name": "oracle.url",
+    "type": "java.lang.String",
+    "description": "URL to db"
+  },
+  {
+    "name": "oracle.driver",
+    "type": "java.lang.String",
+    "description": "A description for 'oracle.driver'"
+  }
+]}

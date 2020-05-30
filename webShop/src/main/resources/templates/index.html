@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+</head>
+<body>
+	<!-- 	<div sec:authorize="isAuthenticated()"> -->
+	<!-- 		<table> -->
+	<!-- 			<tr> -->
+	<!-- 				<td>Logged user: <span sec:authentication="name"></span> -->
+	<!-- 				</td> -->
+	<!-- 				<td><form th:action="@{/logout}" method="post"> -->
+	<!-- 						<input type="submit" value="Sign Out" /> -->
+	<!-- 					</form></td> -->
+	<!-- 			</tr> -->
+	<!-- 		</table> -->
+	<!-- 	</div> -->
+	<!-- 	<div sec:authorize="isAnonymous()"> -->
+	<!-- 		<button type="button" onclick="window.location.href = '/login';">Login</button> -->
+	<!-- 	</div> -->
+	<!-- 	<div sec:authorize="isAuthenticated()"> -->
+	<!-- 		<a th:text="|Cart(__${session.cart.size()}__)|" th:href="@{/cart}"></a> -->
+	<!-- 		<a th:href="@{/profile/u(user=${session.user})}">Profile</a> -->
+	<!-- 		<a th:href="@{/userSettings}">Settings</a> -->
+	<!-- 	</div> -->
+	<!-- 	<ul> -->
+	<!-- 		<li><a th:href="@{/listing/1}" th:text="Home"></a></li> -->
+	<!-- 		<li th:each="category, stats : ${categorymap}" -->
+	<!-- 			th:with="subcategory=${category.value}"><a -->
+	<!-- 			th:href="@{/listing/1/c(category=${category.key})}" -->
+	<!-- 			th:text="${category.key}">Dropdown</a> -->
+	<!-- 			<ul> -->
+	<!-- 				<li th:each="sub : ${subcategory}"><a -->
+	<!-- 					th:href="@{/listing/1/s(subCategory=${sub})}" th:text="${sub}"></a> -->
+	<!-- 				</li> -->
+	<!-- 			</ul></li> -->
+	<!-- 	</ul> -->
+	<div th:replace="common :: navigation"></div>
+	<div>
+		<form th:action="@{/listing/1/filter}" method="POST" name="login">
+			<table>
+				<tr>
+					<td>Filter:</td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" id="name" name="name"></td>
+				</tr>
+				<tr>
+					<td>Cost from:</td>
+					<td><input type="text" id="costFrom" name="costFrom"></td>
+					<td>Cost to:</td>
+					<td><input type="text" id="costTo" name="costTo"></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="submit"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div th:unless="${listings.size()>0}">
+		<p>No products for current filters</p>
+		<a th:href="@{/}" th:text="'Reset filters'"></a>
+	</div>
+	<div th:if="${listings.size()>0}">
+		<table>
+			<tr>
+				<td></td>
+				<td>Name</td>
+				<td>Date Published</td>
+				<td>City</td>
+				<td>Country</td>
+				<td>Cost</td>
+				<td>Available</td>
+				<td>Seller</td>
+			</tr>
+			<tr th:each="listing : ${listings}">
+				<td><img th:alt="|${listing.getId()}-1|"
+					th:src="|/product/file/${listing.getId()}-1.jpg|"></td>
+				<td><a th:text="${listing.getName()}"
+					th:href="@{/product/p(id=${listing.getId()})}"></a></td>
+				<td th:text="${listing.printDate()}" />
+				<td
+					th:text="|${listing.getCity().getName()}, ${listing.getCity().getZipCode()}|" />
+				<td th:text="${listing.getCity().getCountry().getCountryName()}" />
+				<td th:text="|${listing.getCost()} ${listing.getCurrency()}|" />
+				<td th:text="${listing.getNumberAvailable()}" />
+				<td><a
+					th:href="@{/profile/1/p(seller=${listing.getSeller().getUser().getUsername()})}"
+					th:text="${listing.getSeller().getUser().getUsername()}"></a></td>
+				<td th:if="${session.user}"><form
+						th:action="@{/addToCart(listingId=${listing.getId()})}"
+						method="POST" name="addToCard">
+						<button type="submit" name="submit" value="">Add To Cart</button>
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div th:if="${pageNums.size()>1}">
+		<ul th:if="${param.category}">
+			<li><a th:href="@{/listing/1/c(category=${param.category})}"
+				th:text="'<<'"></a></li>
+			<li th:each="num : ${pageNums}"><a
+				th:href="@{/listing/__${num}__/c(category=${param.category})}"
+				th:text="${num}"></a></li>
+			<li><a
+				th:href="@{/listing/__${lastPage}__/c(category=${param.category})}"
+				th:text="'>>'"></a></li>
+		</ul>
+		<ul th:if="${param.category == null and param.subCategory == null}">
+			<li><a th:href="@{/listing/1}" th:text="'<<'"></a></li>
+			<li th:each="num : ${pageNums}"><a
+				th:href="@{/listing/__${num}__}" th:text="${num}"></a></li>
+			<li><a th:href="@{/listing/__${lastPage}__}" th:text="'>>'"></a></li>
+		</ul>
+		<ul th:if="${param.subCategory}">
+			<li><a
+				th:href="@{/listing/1/s(subCategory=${param.subCategory})}"
+				th:text="'<<'"></a></li>
+			<li th:each="num : ${pageNums}"><a
+				th:href="@{/listing/__${num}__/s(subCategory=${param.subCategory})}"
+				th:text="${num}"></a></li>
+			<li><a
+				th:href="@{/listing/__${lastPage}__/s(subCategory=${param.subCategory})}"
+				th:text="'>>'"></a></li>
+		</ul>
+	</div>
+
+</body>
+</html>

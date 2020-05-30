@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>User Settings</title>
+</head>
+<body>
+	<div>
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name"></span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAuthenticated()">
+		<a th:text="|Cart(__${session.cart.size()}__)|" th:href="@{/cart}"></a>
+		<a th:href="@{/profile/u(user=${session.user})}">Profile</a> <a
+			th:href="@{/userSettings}">Settings</a>
+	</div>
+	<div>
+		<table th:object="${user_details}">
+			<tr>
+				<td>Username:</td>
+				<td th:text="*{getUser().getUsername()}"></td>
+			</tr>
+			<tr>
+				<td>Email:</td>
+				<td th:if="*{getEmail()}" th:text="*{getEmail()}"></td>
+				<td th:unless="*{getEmail()}">n/a</td>
+			</tr>
+			<tr>
+				<td>First name:</td>
+				<td th:if="*{getFirstName()}" th:text="*{getFirstName()}"></td>
+				<td th:unless="*{getFirstName()}">n/a</td>
+			</tr>
+			<tr>
+				<td>Last name:</td>
+				<td th:if="*{getLastName()}" th:text="*{getLastName()}"></td>
+				<td th:unless="*{getLastName()}">n/a</td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td th:if="*{getAddress()}" th:text="*{getAddress()}"></td>
+				<td th:unless="*{getAddress()}">n/a</td>
+			</tr>
+			<tr>
+				<td>City:</td>
+				<td th:if="*{getCity()}" th:text="*{getCityCountry()}"></td>
+				<td th:unless="*{getCity()}">n/a</td>
+			</tr>
+			<tr>
+				<td><button type="button"
+						onclick="window.location.href = '/modifyUserDetails';">Modify</button></td>
+				<td><button type="button" onclick="window.location.href = '/';">Back</button></td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<table>
+			<tr>
+				<td>Wallet:</td>
+				<td><button type="button"
+						onclick="window.location.href = '/newCard';">New Card</button></td>
+			</tr>
+			<th:block th:unless="${cardList.isEmpty()}">
+				<tr>
+					<td>Card list:</td>
+					<td><a th:href="@{/expenses}" th:text="'Buy list'"></a></td>
+				</tr>
+				<th:block th:each="card : ${cardList}" th:object="${card}">
+					<tr>
+						<td th:text="|****{getLast4()}|"></td>
+						<td th:text="*{getProvider()}"></td>
+						<td><a th:href="@{'/expenses/' + *{getId()}}"
+							th:text="Expenses"></a></td>
+						<td><a th:href="@{'/card/' + *{getId()}}" th:text="Delete"></a></td>
+					</tr>
+				</th:block>
+			</th:block>
+		</table>
+	</div>
+	<div>
+		<table th:unless="${cardList.isEmpty()}">
+			<tr>
+				<td>Seller Authorized Card:</td>
+			</tr>
+			<tr th:switch="${sellerAuthorization.isEmpty() == true}">
+				<th:block th:case="false">
+					<td>Authorized Card:</td>
+					<td th:text="|****${sellerAuthorization.getCard().getLast4()}|"></td>
+					<td><a
+						th:href="@{'/sellerDashboard/' + ${sellerAuthorization.getId()}}"
+						th:text="'Change Card'"></a></td>
+				</th:block>
+				<th:block th:case="true">
+					<td>Not Authorized:</td>
+					<td><a th:href="@{/sellerDashboard/selectCard}"
+						th:text="'Authorize Card'"></a></td>
+				</th:block>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<button type="button"
+			onclick="window.location.href = '/sellerDashboard';">Seller
+			Dashboard</button>
+	</div>
+</body>
+</html>

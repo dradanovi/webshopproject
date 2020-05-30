@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Seller</title>
+</head>
+<body sec:authorize="isAuthenticated()">
+	<div>
+		<form th:action="@{/sellerDashboard/selectCard}" method="POST"
+			name="seller" th:object="${seller}">
+			<table>
+				<tr>
+					<td>User:</td>
+					<td th:text="${session.user}"></td>
+				</tr>
+				<tr>
+					<td>Card:</td>
+					<td><select id="card" name="card" onselect="">
+							<option value="" hidden="">Select Card</option>
+							<option th:each="card : ${cardList}" th:value="${card}"
+								th:text="|***${card}|"></option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="save" /></td>
+					<td><button type="button"
+							onclick="window.location.href = '/userSettings';">Back</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Review</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name"></span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div sec:authorize="isAuthenticated()" th:if="${mode.equals('new')}">
+		<form th:action="@{/review/__${productId}__}" method="POST"
+			name="review" th:object="${review}">
+			<table>
+				<tr>
+					<td>Product id:</td>
+					<td th:text="${productId}"></td>
+				</tr>
+				<tr>
+					<td>Rating:</td>
+					<td><input type="number" min="1" max="5" th:field="*{grade}"></td>
+				</tr>
+				<!-- 				<tr> -->
+				<!-- 					<td>Message:</td> -->
+				<!-- 					<td><input type="text" maxlength="2000" th:field="*{message}"></td> -->
+				<!-- 				</tr> -->
+				<tr>
+					<td>Message:</td>
+					<td><textarea rows="4" cols="50" maxlength="2000"
+							name="comment" th:field="*{message}"
+							placeholder="Enter text here...">
+						</textarea></td>
+				</tr>
+				<tr>
+					<td><input type="submit"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div th:if="${mode.equals('show')}">
+		<table th:object="${review}">
+			<tr>
+				<td>Product id:</td>
+				<td><a
+					th:href="@{/product/p(id=${review.getProduct().getId()})}"
+					th:text="${review.getProduct().getId()}"></a></td>
+			</tr>
+			<tr>
+				<td>Rating:</td>
+				<td><span th:text="*{grade}"></span></td>
+			</tr>
+			<tr>
+				<td>Message:</td>
+				<td><span th:text="*{message}"></span></td>
+			</tr>
+			<tr sec:authorize="isAuthenticated()">
+				<td><a th:href="@{/review/c(review=${review.getId()})}"
+					th:text="'Change Review'"></a></td>
+		</table>
+	</div>
+	<div sec:authorize="isAuthenticated()" th:if="${mode.equals('change')}">
+		<form th:action="@{/review/__${productId}__}" method="POST"
+			name="review" th:object="${review}">
+			<table>
+				<tr>
+					<td>Product id:<input type="hidden" th:field="*{id}"></td>
+					<td><a
+						th:href="@{/product/p(id=${review.getProduct().getId()})}"
+						th:text="${review.getProduct().getId()}"></a></td>
+				</tr>
+				<tr>
+					<td>Rating:</td>
+					<td><input type="number" min="1" max="5" th:field="*{grade}"></td>
+				</tr>
+				<tr>
+					<td>Message:</td>
+					<td><textarea rows="4" cols="50" maxlength="2000"
+							name="comment" form="usrform" th:field="*{message}"
+							placeholder="Enter text here...">
+						</textarea></td>
+				</tr>
+				<tr>
+					<td><input type="submit"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<button type="button" onclick="window.history.back();">Back</button>
+	<button type="button" onclick="window.location.href = '/';">HomePage</button>
+</body>
+</html>

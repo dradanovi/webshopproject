@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+</head>
+<body>
+	<div>
+		<p th:if="${param.registerEmpty}" class="error">Enter user
+			credentials</p>
+		<p th:if="${param.message}" class="error" th:text="${param.message}"></p>
+		<form th:action="@{/registerUser}" method="POST" name="registerUser"
+			th:object="${user}">
+			<table>
+				<tr>
+					<td>Register</td>
+				</tr>
+				<tr>
+					<td>Email</td>
+					<td><input type="text" name="email"
+						th:value="${details.email}" autofocus="autofocus"
+						placeholder="Email" /></td>
+				<tr>
+					<td>Username</td>
+					<td><input type="text" name="username" th:field="*{username}"
+						placeholder="Username" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" name="password"
+						th:field="*{password}" placeholder="Password" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Register" /></td>
+					<td><button type="button"
+							onclick="window.location.href = '/login';">Back</button></td>
+					<td><input type="hidden" name="_csrf"
+						th:value="${_csrf.token}" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

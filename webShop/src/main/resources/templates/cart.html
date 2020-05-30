@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Cart</title>
+</head>
+<body>
+	<div sec:authorize="isAuthenticated()">
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name"></span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<div th:if="${session.cart.size() > 0}">
+		<form th:action="@{/payment}" method="POST" name="payment">
+			<table>
+				<tr>
+					<td>Name</td>
+					<td>Date Published</td>
+					<td>City</td>
+					<td>Country</td>
+					<td>Cost</td>
+					<td>Available</td>
+				</tr>
+				<tr th:each="listing : ${listings}">
+					<td th:text="${listing.getName()}"></td>
+					<td th:text="${listing.printDate()}"></td>
+					<td
+						th:text="|${listing.getCity().getName()}, ${listing.getCity().getZipCode()}|"></td>
+					<td th:text="${listing.getCity().getCountry().getCountryName()}"></td>
+					<td th:text="|${listing.getCost()} ${listing.getCurrency()}|"></td>
+					<td th:text="${listing.getNumberAvailable()}"></td>
+					<td><a th:text="X"
+						th:href="@{/removeFromCart(productId=${listing.getId()})}"></a></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td th:text="|${sum} ${session.currency}|"></td>
+				</tr>
+				<tr>
+					<td>Card</td>
+					<td><select id="card" name="card" onselect="">
+							<option value="" hidden="">Select Card</option>
+							<option th:each="card : ${cardList}" th:value="${card}"
+								th:text="|***${card}|"></option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><button type="submit" value="submit">Pay</button></td>
+					<td><button type="button"
+							onclick="window.location.href = '/emptyCart';">Empty
+							Cart</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div th:unless="${session.cart.size() > 0}">
+		<p>Cart Empty</p>
+	</div>
+	<div>
+		<button type="button" onclick="window.location.href = '/listing/1';">Back</button>
+	</div>
+</body>
+</html>

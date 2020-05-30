@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Modify User Details</title>
+</head>
+<body sec:authorize="isAuthenticated()">
+	<div>
+		<table>
+			<tr>
+				<td>Logged user: <span sec:authentication="name">Bob</span>
+				</td>
+				<td><form th:action="@{/logout}" method="post">
+						<input type="submit" value="Sign Out" />
+					</form></td>
+			</tr>
+		</table>
+	</div>
+	<p th:if="${param.detailsEmpty}" class="error">Enter user details</p>
+	<div>
+		<form th:action="@{/modifyUserDetails}" method="POST" name="modify"
+			th:object="${user_details}">
+			<table>
+				<tr>
+					<td>Username:</td>
+					<td th:text="${session.user}"></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td th:if="*{getEmail()}"><input type="email" name="email"
+						th:field="*{email}"></td>
+					<td th:unless="*{getEmail()}"><input type="email" name="email"
+						placeholder="email" th:field="*{email}"></td>
+				</tr>
+				<tr>
+					<td>First name:</td>
+					<td th:if="*{getFirstName()}"><input type="text"
+						name="firstName" th:field="*{firstName}"></td>
+					<td th:unless="*{getFirstName()}"><input type="text"
+						name="firstName" placeholder="First name" th:field="*{firstName}"></td>
+				</tr>
+				<tr>
+					<td>Last name:</td>
+					<td th:if="*{getLastName()}"><input type="text"
+						name="lastName" th:field="*{lastName}"></td>
+					<td th:unless="*{getLastName()}"><input type="text"
+						name="firstName" placeholder="Last Names" th:field="*{lastName}"></td>
+				</tr>
+				<tr>
+					<td>Address:</td>
+					<td th:if="*{getAddress()}"><input type="text" name="address"
+						th:field="*{address}"></td>
+					<td th:unless="*{getAddress()}"><input type="text"
+						name="address" placeholder="Address" th:field="*{address}"></td>
+				</tr>
+
+				<tr>
+					<td>City:</td>
+					<th:block th:if="*{getCity()}">
+						<td><input type="text" name="cityname"
+							th:field="*{city.name}"></td>
+						<td><input type="text" name="cityzipcode"
+							th:field="*{city.zipCode}"></td>
+					</th:block>
+					<th:block th:unless="*{getCity()}">
+						<td><input type="text" name="cityname" placeholder="Name"
+							th:field="*{city.name}"></td>
+						<td><input type="text" name="cityzipcode"
+							placeholder="Zip Code" th:field="*{city.zipCode}"></td>
+					</th:block>
+				</tr>
+				<tr>
+					<td>Country:</td>
+					<td th:if="*{getCity().getCountry()}"><select
+						th:field="*{city.country.countryName}" id="country" name="country"
+						onselect="">
+							<option value="*{city.country.countryName}" hidden=""></option>
+							<option th:each="country : ${countryList}" th:value="${country}"
+								th:text="${country}"></option>
+					</select></td>
+					<td th:unless="*{getCity().getCountry()}"><select
+						th:field="*{city.country.countryName}" id="country" name="country"
+						onselect="">
+							<option value="" hidden="">--- Select Country ---</option>
+							<option th:each="country : ${countryList}" th:value="${country}"
+								th:text="${country}"></option>
+					</select></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Save" /></td>
+					<td><button type="button"
+							onclick="window.location.href = '/userSettings';">Back</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
