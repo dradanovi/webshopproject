@@ -1,0 +1,72 @@
+@charset "UTF-8";
+/*prva navigacija*/
+.main-navigation {
+	clear:both;
+	text-align:center;
+	float:left;
+	z-index:1;
+}
+.main-navigation li {
+	display:inline;
+}
+.main-navigation ul {
+	margin:0;
+	padding:0.625em 0;
+}
+.main-navigation a {
+	display:inline-block;
+	padding:0.625em 1.875em;
+	color:black;
+	text-decoration:none;
+	font-size:1.1em;
+	transition:300ms;
+}
+.main-navigation a:hover {
+	color:#00447C;
+	background-color:blue;
+	text-decoration:underline;
+}
+
+.navigation ul { 
+	margin:0;
+	padding:3em 0;
+	overflow:hidden;
+	height:auto;
+}
+.navigation li { 
+	display:inline-block;
+ 	float:left;
+	padding-left:1em;
+ }
+.navigation a { 
+	display:inline-block;
+	padding:0.625em 0.6em 0.625em 0.5em;
+	color:black;
+	text-decoration:none;
+	font-weight:400;
+	font-size:1.2em;
+}
+.navigation a:hover {
+	color:black;
+	text-decoration:underline;
+}
+/*hero navigacija 2*/
+.navigation li ul{
+	opacity:0;
+	visibility: hidden;
+	position:absolute;
+	transition:300ms;
+	/*margin-top:-10px;*/
+	transform:translateY(0.625em);
+}
+.navigation li li {
+	display:inline-block;
+	float:left;	}
+
+.navigation li:hover > ul {
+	opacity:1;
+	visibility: visible;
+	padding:1.2em 0;
+	margin:0;
+	transform:translateY(0em);
+}

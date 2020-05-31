@@ -36,6 +36,12 @@ public class IndexController {
 	@Autowired
 	private CategoryService catService;
 
+	@GetMapping("/index")
+	public String index(Model model) {
+		model.addAttribute("categorymap", catService.getNavBar());
+		return "index";
+	}
+	
 	/**
 	 * displays the product list on base page after login with no filters active
 	 * 
@@ -43,11 +49,11 @@ public class IndexController {
 	 * @return
 	 */
 	@GetMapping("/")
-	public String index(Model model) {
+	public String nofilter(Model model) {
 		log.info("index get OK");
 		List<Product> list = saleService.getAvailableProductList();
 		listingPaging(1, list, model);
-		return "index";
+		return "listings";
 	}
 
 	/**
@@ -62,7 +68,7 @@ public class IndexController {
 		log.info("index get " + page + " OK");
 		List<Product> list = saleService.getAvailableProductList();
 		listingPaging(page, list, model);
-		return "index.html";
+		return "listings";
 	}
 
 	/**
@@ -81,7 +87,7 @@ public class IndexController {
 		List<Product> list = saleService.getAvailableProductList();
 		list = list.stream().filter(e -> subList.contains(e.getCategory())).collect(Collectors.toList());
 		listingPaging(page, list, model);
-		return "index";
+		return "listings";
 	}
 
 	/**
@@ -98,7 +104,7 @@ public class IndexController {
 		List<Product> list = saleService.getAvailableProductList();
 		list = list.stream().filter(e -> e.getCategory().equals(subCategory)).collect(Collectors.toList());
 		listingPaging(page, list, model);
-		return "index";
+		return "listings";
 	}
 
 	/**
@@ -117,7 +123,7 @@ public class IndexController {
 		log.info("" + name);
 		List<Product> list = saleService.filterProducts(costFrom, costTo, name);
 		listingPaging(page, list, model);
-		return "index";
+		return "listings";
 	}
 
 	/**

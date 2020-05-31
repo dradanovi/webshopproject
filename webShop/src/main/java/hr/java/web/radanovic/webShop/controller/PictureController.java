@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,8 +55,12 @@ public class PictureController {
 			@PathVariable("pic") String picId) {
 		log.info("responsebody get picture");
 		log.info("src\\main\\resources\\productPics\\" + productId + "-" + picId);
-		return ResponseEntity.ok().body(
-				new FileSystemResource(new File("src\\main\\resources\\productPics\\" + productId + "-" + picId)));
+		log.info("product " + productId);
+		log.info("pic " + picId);
+		File file = new File("src\\main\\resources\\static\\img\\" + productId + "-" + picId + ".jpg");
+		log.info(file.getAbsolutePath());
+		return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.parseMediaType("image/jpg")).body(
+				new FileSystemResource(file));
 	}
 
 	/**
