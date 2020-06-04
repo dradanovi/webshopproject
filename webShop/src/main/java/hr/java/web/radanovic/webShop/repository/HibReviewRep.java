@@ -137,7 +137,7 @@ public class HibReviewRep implements RepReviews {
 		if (ids != null) {
 			ids.forEach(e -> predicates.add(cb.equal(root.get("id"), e)));
 		}
-		if (ids != null) {
+		if (ids != null || productList != null) {
 			cq.where(cb.or(predicates.toArray(new Predicate[] {})));
 		} else {
 			cq.where(cb.and(predicates.toArray(new Predicate[] {})));

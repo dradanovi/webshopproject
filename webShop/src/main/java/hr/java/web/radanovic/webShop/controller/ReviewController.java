@@ -113,6 +113,8 @@ public class ReviewController {
 	@GetMapping("/review/all/seller")
 	public String showReviews(@RequestParam("seller") String user, Model model) {
 		model.addAttribute("reviews", saleService.getAllSellerReviews(user));
+		log.info(saleService.getAllSellerReviews(user).size() + "size");
+		saleService.getAllSellerReviews(user).forEach(e -> log.info(e.toString()));;
 		return "sellerReviews";
 	}
 

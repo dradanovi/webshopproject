@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import hr.java.web.radanovic.webShop.enums.Category;
 import hr.java.web.radanovic.webShop.model.Product;
 import hr.java.web.radanovic.webShop.service.CategoryService;
 import hr.java.web.radanovic.webShop.service.SaleService;
+import hr.java.web.radanovic.webShop.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,11 +37,20 @@ public class IndexController {
 
 	@Autowired
 	private CategoryService catService;
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/index")
 	public String index(Model model) {
 		model.addAttribute("categorymap", catService.getNavBar());
 		return "index";
+	}
+	
+	@GetMapping("/checkSeller")
+	@ResponseBody
+	public boolean check(@RequestParam("user") String user) {
+		return userService.getSeller(user) != null ? true : false;
 	}
 	
 	/**
