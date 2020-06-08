@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<th:block th:replace="common :: head"></th:block>
+</head>
+<body>
+	<div th:replace="common :: header"></div>
+
+	<div class="row content">
+		<div id="prologue" class="float-left column column-6">
+			<div>
+				<p>Placeholder place for a short prologue that describe the goal
+					and functionality of the page</p>
+			</div>
+			<div>
+				<p>Recommendations:</p>
+				<table>
+					<th:block th:each="product : ${recommendations}">
+						<tr>
+							<td rowspan="3"><img alt=""
+								th:src="@{/product/file/__${product.getId()}__-1}"></td>
+							<td colspan="2"><a
+								th:href="@{/product/p(id=${product.getId()})}"
+								th:text="${product.getName()}"></a></td>
+							<td><a
+								th:href="@{/listing/1/s(subCategory=${product.getCategory()})}"
+								th:text="${product.getCategory()}"></a></td>
+							<td rowspan="3" th:text="${product.getNumberAvailable()}"></td>
+							<td rowspan="3"
+								th:text="|${product.getCost()} ${product.getCurrency()}|"></td>
+							<td rowspan="3" th:if="${session.user}"><form
+									th:action="@{/addToCart(listingId=${product.getId()})}"
+									method="POST" name="addToCard">
+									<a href="#" onclick="this.parentNode.submit();">Add To Cart</a>
+								</form></td>
+						</tr>
+						<tr>
+							<td rowspan="2" colspan="3" th:text="${product.getDescription()}"></td>
+						</tr>
+						<tr>
+
+						</tr>
+					</th:block>
+				</table>
+			</div>
+		</div>
+		<div id="reviews" class="float-right column column-5">
+			<p>Reviews:</p>
+			<table>
+				<th:block th:each="review : ${bestReviews}">
+					<tr>
+						<td th:text="${review.getGrade()}"></td>
+						<td><a
+							th:href="@{/profile/u(user=${review.getUser().getUsername()})}"
+							th:text="${review.getUser().getUsername()}"></a></td>
+					</tr>
+					<tr>
+						<td colspan="2"><a
+							th:href="@{/product/p(id=${review.getProduct().getId()})}"
+							th:text="${review.getProduct().getName()}"></a></td>
+					</tr>
+					<tr>
+						<td colspan="2" th:text="${review.getMessage()}"></td>
+					</tr>
+				</th:block>
+			</table>
+		</div>
+
+		<div id="newest" class="float-left column column-12">
+			<p>Newest products:</p>
+			<table>
+				<th:block th:each="product : ${newestProducts}">
+					<tr>
+						<td rowspan="3"><img alt=""
+							th:src="@{/product/file/__${product.getId()}__-1}"></td>
+						<td colspan="2"><a
+							th:href="@{/product/p(id=${product.getId()})}"
+							th:text="${product.getName()}"></a></td>
+						<td><a
+							th:href="@{/listing/1/s(subCategory=${product.getCategory()})}"
+							th:text="${product.getCategory()}"></a></td>
+						<td rowspan="3" th:text="${product.getNumberAvailable()}"></td>
+						<td rowspan="3"
+							th:text="|${product.getCost()} ${product.getCurrency()}|"></td>
+						<td rowspan="3" th:if="${session.user}"><form
+								th:action="@{/addToCart(listingId=${product.getId()})}"
+								method="POST" name="addToCard">
+								<a href="#" onclick="this.parentNode.submit();">Add To Cart</a>
+							</form></td>
+					</tr>
+					<tr>
+						<td rowspan="2" colspan="3" th:text="${product.getDescription()}"></td>
+					</tr>
+					<tr>
+
+					</tr>
+				</th:block>
+			</table>
+		</div>
+	</div>
+
+	<div th:replace="common :: footer"></div>
+</body>
+</html>

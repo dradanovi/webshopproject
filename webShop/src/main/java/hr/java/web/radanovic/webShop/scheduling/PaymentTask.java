@@ -33,7 +33,7 @@ public class PaymentTask {
 	// per hour
 	@Scheduled(fixedRate = 1000 * 60 * 60)
 	@Transactional
-	public void proccessPayment() {
+	private void proccessPayment() {
 		log.info("Schedule trigger");
 		List<Expense> unpaidList = saleService.getUnpaid();
 		for (Expense expense : unpaidList) {

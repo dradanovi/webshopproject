@@ -73,9 +73,10 @@ public class LoginController {
 		session.setAttribute("user", username);
 		session.setAttribute("currency", userService.getWalletByUser().getCurrency());
 		session.setAttribute("cart", new ArrayList<Product>());
+		session.setAttribute("isSeller", userService.sellerExists(username));
 		session.setAttribute("back", "/");
 		
-		return "redirect:/";
+		return "redirect:/index";
 	}
 
 	/**

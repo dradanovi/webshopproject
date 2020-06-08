@@ -1,7 +1,5 @@
 package hr.java.web.radanovic.webShop.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -201,6 +199,10 @@ public class SaleService {
 	
 	public List<Product> filterProducts(Long costFrom, Long costTo, String name){
 		return prodRepo.findByFilter(costFrom, costTo, name);
+	}
+	
+	public List<Product> findNewestForMain(){
+		return prodRepo.findNewestForMain();
 	}
 
 	/**
@@ -411,6 +413,10 @@ public class SaleService {
 	
 	public List<Review> getAllSellerReviews(String username){
 		return reviewRepo.findAllByListProducts(getProductListBySeller(userService.getSeller(username)));
+	}
+	
+	public List<Review> getReviewsForMain(){
+		return reviewRepo.findBestForMain();
 	}
 
 }

@@ -121,6 +121,18 @@ public class HibProductRep implements RepProduct {
 		cq.where(cb.and(predicates.toArray(new Predicate[] {})));
 		return em.createQuery(cq).getResultList();
 	}
+	
+	public List<Product> findNewestForMain(){
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+		Root<Product> root = cq.from(Product.class);
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(cb.greaterThan(root.get("numberAvailable"), 0));
+		predicates.add(cb.equal(root.get("enabled"), true));
+		cq.orderBy(cb.desc(root.get("date"))).where(cb.and(predicates.toArray(new Predicate[] {})));
+//		cq.where(cb.and(predicates.toArray(new Predicate[] {})));
+		return em.createQuery(cq).setMaxResults(5).getResultList();
+	}
 
 	private List<Product> queryBuilder(Seller seller, boolean enabled, boolean available, Iterable<Long> ids) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();

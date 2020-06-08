@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
+<th:block th:replace="common :: head"></th:block>
 </head>
 <body>
 	<!-- 	<div sec:authorize="isAuthenticated()"> -->
@@ -37,7 +38,8 @@
 	<!-- 				</li> -->
 	<!-- 			</ul></li> -->
 	<!-- 	</ul> -->
-	<div th:replace="common :: navigation"></div>
+	<div th:replace="common :: header"></div>
+	<div class="row">
 	<div>
 		<form th:action="@{/listing/1/filter}" method="POST" name="login">
 			<table>
@@ -127,6 +129,7 @@
 				th:text="'>>'"></a></li>
 		</ul>
 	</div>
-
+	</div>
+<div th:replace="common :: footer"></div>
 </body>
 </html>

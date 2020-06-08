@@ -141,6 +141,14 @@ public class UserService {
 		log.info("set seller rating: " + seller.getRating() + " reviews: " + seller.getReviews());
 		return sellerRepo.save(seller);
 	}
+	
+	public boolean sellerExists(String username) {
+		return sellerRepo.existsByUser(getUser(username));
+	}
+	
+	public Seller updateSeller(Seller seller) {
+		return sellerRepo.update(seller);
+	}
 
 	/**
 	 * updates the logged in users user information

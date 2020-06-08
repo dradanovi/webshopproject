@@ -29,8 +29,14 @@ public class HibSellerRep implements RepSeller {
 
 	@Override
 	public <S extends Seller> S save(S entity) {
-		log.info(entity.toString());
+		log.info("persist " + entity.toString());
 		em.persist(entity);
+		return entity;
+	}
+	
+	public <S extends Seller> S update(S entity) {
+		log.info("merge " + entity.toString());
+		em.merge(entity);
 		return entity;
 	}
 
@@ -47,10 +53,22 @@ public class HibSellerRep implements RepSeller {
 
 	@Override
 	public boolean existsById(Long id) {
-			if(em.find(Seller.class, id) != null) {
-				return true;
-			}
+		if (em.find(Seller.class, id) != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean existsByUser(AppUser user) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Seller> cq = cb.createQuery(Seller.class);
+		Root<Seller> root = cq.from(Seller.class);
+		cq.where(cb.equal(root.get("user"), user));
+		if (em.createQuery(cq).getResultList().size() > 0)
+			return true;
+		else
 			return false;
+
 	}
 
 	@Override

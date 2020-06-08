@@ -59,8 +59,17 @@ public class PictureController {
 		log.info("pic " + picId);
 		File file = new File("src\\main\\resources\\static\\img\\" + productId + "-" + picId + ".jpg");
 		log.info(file.getAbsolutePath());
-		return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.parseMediaType("image/jpg")).body(
-				new FileSystemResource(file));
+		return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.parseMediaType("image/jpg"))
+				.body(new FileSystemResource(file));
+	}
+	
+	@ResponseBody
+	@GetMapping("/logo/file/{name}")
+	public ResponseEntity<Resource> picUrl(@PathVariable("name") String productId) {
+		File file = new File("src\\main\\resources\\static\\img\\" + productId + ".png");
+		log.info(file.getAbsolutePath());
+		return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.parseMediaType("image/png"))
+				.body(new FileSystemResource(file));
 	}
 
 	/**

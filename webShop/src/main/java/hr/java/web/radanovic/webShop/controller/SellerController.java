@@ -221,7 +221,7 @@ public class SellerController {
 		model.addAttribute("caseOption", "unfinished");
 		model.addAttribute("seller", userService.getSeller());
 		List<Product> list = saleService.unfinished();
-		List<String> picList = Arrays.asList(new File("src\\main\\resources\\productPics\\").listFiles()).stream()
+		List<String> picList = Arrays.asList(new File("src\\main\\resources\\static\\img\\").listFiles()).stream()
 				.map(e -> e.getName()).collect(Collectors.toList());
 		model.addAttribute("listings", list);
 		for (Product product : list) {

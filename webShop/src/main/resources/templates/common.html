@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 	<div id="navigation" th:fragment="navigation">
 		<div sec:authorize="isAuthenticated()">
@@ -34,5 +35,130 @@
 				</ul></li>
 		</ul>
 	</div>
+	<!-- 	head fragment -->
+	<th:block id="head" th:fragment="head">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/grid.css}" />
+	</th:block>
+	<!-- 	header fragment -->
+	<th:block id="header" th:fragment="header">
+		<header class="site-header">
+			<div class="row">
+				<a class="float-left column column-6" th:href="@{/index}"><img
+					alt="logo" th:src="@{/logo/file/company-logo}"></a>
+
+				<div class="user-nav column column-6">
+					<ul sec:authorize="isAuthenticated()" class="float-right">
+						<li class="parent"><a href="#">[[${session.user}]]</a>
+							<ul class="child">
+								<li><a th:href="@{/profile/u(user=${session.user})}"
+									th:text="Profile"></a></li>
+								<li><a th:href="@{/}" th:text="Inbox"></a></li>
+								<li class="parent"><a href="#">History<span
+										class="expand">>></span></a>
+									<ul class="child">
+										<li><a th:href="@{/expenses}" th:text="'Bought Items'"></a></li>
+										<li><a th:if="${session.isSeller}"
+											th:href="@{/sellerDashboard/salesList/1}"
+											th:text="'Sold Items'"></a></li>
+									</ul></li>
+								<li><a th:href="@{/userSettings}" th:text="Settings"></a></li>
+								<li><form th:action="@{/logout}" method="post">
+										<!-- 										<input type="submit" value="Sign Out" /> -->
+										<a href="#" onclick="this.parentNode.submit();">Sign Out</a>
+									</form></li>
+							</ul></li>
+						<li class="parent"><a th:href="@{/cart}"
+							th:text="|Cart(__${session.cart.size()}__)|"></a></li>
+					</ul>
+					<ul sec:authorize="isAnonymous()" class="float-right">
+						<li class="parent"><a th:href="@{/login}" th:text="'Sign in'"></a></li>
+						<li class="parent"><a th:href="@{/registerUser}"
+							th:text="'Sign up'"></a></li>
+					</ul>
+				</div>
+
+				<div class="floaf-left column column-12">
+
+					<nav class="navigation">
+						<ul>
+							<li><a th:href="@{/index}" th:text="Home"></a></li>
+							<li><a href="#">Categories</a>
+								<ul>
+									<th:block th:each="category, stats : ${categorymap}"
+										th:with="subcategory=${category.value}">
+
+										<li><div>
+												<a th:href="@{/listing/1/c(category=${category.key})}"
+													th:text="${category.key}">cat</a><br>
+												<hr>
+												<th:block th:each="sub : ${subcategory}">
+													<a th:href="@{/listing/1/s(subCategory=${sub})}"
+														th:text="${sub}">sub</a>
+													<br>
+												</th:block>
+											</div></li>
+
+									</th:block>
+								</ul></li>
+							<li th:if="${session.isSeller}"><a href="#">Sales</a>
+								<ul>
+									<li><a th:href="@{/sellerDashboard/addListing}"
+										th:text="'Add new'"></a></li>
+									<li><a th:href="@{/sellerDashboard/currentListings/1}"
+										th:text="'View current'"></a></li>
+								</ul></li>
+							<li><a th:href="@{/about}" th:text="About"></a></li>
+						</ul>
+
+					</nav>
+
+				</div>
+
+
+			</div>
+		</header>
+	</th:block>
+	<!-- 	footer fragment -->
+	<th:block id="footer" th:fragment="footer">
+		<footer class="footer">
+			<div class="row">
+				<div id="information" class="column column-4">
+					<ul>
+						<li>placeholder address</li>
+						<li><a href="#">Contact us</a></li>
+						<li><a href="#">Terms and conditions</a></li>
+						<li><a href="#">Privacy policy</a></li>
+					</ul>
+				</div>
+				<div id="payments" class="column column-4">
+					<ul>
+						<li>Payment options:</li>
+						<li><ul>
+								<li><img alt="visa" th:src="@{/logo/file/visa-logo}"
+									width="60"></li>
+								<li><img alt="masterCard"
+									th:src="@{/logo/file/masterCard-logo}" width="60"></li>
+								<li><img alt="masestro" th:src="@{/logo/file/maestro-logo}"
+									width="60"></li>
+							</ul>
+					</ul>
+				</div>
+				<div id="follows" class="column column-4">
+					<ul>
+						<li>Follow us:</li>
+						<li><ul>
+								<li><img alt="visa" th:src="@{/logo/file/twitter-logo}"
+									width="30"></li>
+								<li><img alt="masterCard"
+									th:src="@{/logo/file/facebook-logo}" width="30"></li>
+								<li><img alt="masestro"
+									th:src="@{/logo/file/instagram-logo}" width="30"></li>
+							</ul>
+					</ul>
+				</div>
+			</div>
+		</footer>
+	</th:block>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login");
-//		WebMvcConfigurer.super.addViewControllers(registry);
+		WebMvcConfigurer.super.addViewControllers(registry);
 	}
 
 }

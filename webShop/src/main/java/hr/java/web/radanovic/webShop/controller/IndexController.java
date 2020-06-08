@@ -1,5 +1,6 @@
 package hr.java.web.radanovic.webShop.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,9 @@ public class IndexController {
 	@GetMapping("/index")
 	public String index(Model model) {
 		model.addAttribute("categorymap", catService.getNavBar());
+		model.addAttribute("newestProducts", saleService.findNewestForMain());
+		model.addAttribute("bestReviews", saleService.getReviewsForMain());
+		model.addAttribute("recommendations", Arrays.asList(saleService.getAvailableProductList().stream().findFirst().get()));
 		return "index";
 	}
 	

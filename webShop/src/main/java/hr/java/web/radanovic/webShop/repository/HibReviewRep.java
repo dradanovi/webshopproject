@@ -119,6 +119,16 @@ public class HibReviewRep implements RepReviews {
 		} else
 			return new Review();
 	}
+	
+	public List<Review> findBestForMain(){
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Review> cq = cb.createQuery(Review.class);
+		Root<Review> root = cq.from(Review.class);
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(cb.greaterThanOrEqualTo(root.get("grade"), 4));
+		cq.orderBy(cb.desc(root.get("grade"))).where(cb.and(predicates.toArray(new Predicate[] {})));
+		return em.createQuery(cq).setMaxResults(5).getResultList();
+	}
 
 	private List<Review> queryBuilder(AppUser user, Product product, List<Product> productList, Iterable<Long> ids) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
