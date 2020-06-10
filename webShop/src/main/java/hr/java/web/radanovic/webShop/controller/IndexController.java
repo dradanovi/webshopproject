@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hr.java.web.radanovic.webShop.enums.Category;
 import hr.java.web.radanovic.webShop.model.Product;
+import hr.java.web.radanovic.webShop.repository.HibSellerRep;
 import hr.java.web.radanovic.webShop.service.CategoryService;
 import hr.java.web.radanovic.webShop.service.SaleService;
 import hr.java.web.radanovic.webShop.service.UserService;
@@ -41,6 +42,9 @@ public class IndexController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private HibSellerRep repo;
 
 	@GetMapping("/index")
 	public String index(Model model) {
@@ -48,6 +52,7 @@ public class IndexController {
 		model.addAttribute("newestProducts", saleService.findNewestForMain());
 		model.addAttribute("bestReviews", saleService.getReviewsForMain());
 		model.addAttribute("recommendations", Arrays.asList(saleService.getAvailableProductList().stream().findFirst().get()));
+		repo.recalculateRating();
 		return "index";
 	}
 	

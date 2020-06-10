@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -128,5 +129,10 @@ public class HibSellerRep implements RepSeller {
 			e.printStackTrace();
 			return Optional.empty();
 		}
+	}
+	
+	public boolean recalculateRating() {
+		StoredProcedureQuery spQuery = em.createNamedStoredProcedureQuery("recalculateratings");
+		return spQuery.execute();
 	}
 }

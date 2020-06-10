@@ -149,6 +149,10 @@ public class UserService {
 	public Seller updateSeller(Seller seller) {
 		return sellerRepo.update(seller);
 	}
+	
+	public boolean recalculateRatings() {
+		return sellerRepo.recalculateRating();
+	}
 
 	/**
 	 * updates the logged in users user information
