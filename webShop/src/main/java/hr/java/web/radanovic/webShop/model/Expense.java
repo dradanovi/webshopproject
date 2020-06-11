@@ -34,11 +34,8 @@ public class Expense {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSE_SEQ")
 	@SequenceGenerator(name = "EXPENSE_SEQ", sequenceName = "EXPENSE_SEQ", initialValue = 1, allocationSize = 1)
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "amount")
 	private BigDecimal amount;
-	@Column(name = "currency")
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 	@Column(name = "date_created")
@@ -46,7 +43,7 @@ public class Expense {
 	@Column(name = "date_closed")
 	private LocalDateTime datePayed;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "card_id")
 	private CardInfo cardUsed;
 

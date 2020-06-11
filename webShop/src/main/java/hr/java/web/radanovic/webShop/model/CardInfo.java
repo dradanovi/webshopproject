@@ -30,7 +30,6 @@ public class CardInfo {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARD_INFO_SEQ")
 	@SequenceGenerator(name = "CARD_INFO_SEQ", sequenceName = "CARD_INFO_SEQ", initialValue = 1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
 	@Column(name = "cardholder_first_name")
 	private String cardHolderFirstName;
@@ -38,7 +37,6 @@ public class CardInfo {
 	private String cardHolderLastName;
 	@Column(name = "card_number")
 	private String cardNumber;
-	@Column(name = "csc")
 	private Integer csc;
 	@Column(name = "card_provider")
 	@Enumerated(EnumType.STRING)
@@ -47,7 +45,7 @@ public class CardInfo {
 	// 2007-12-03T10:15:30
 	private LocalDate expirationDate;
 	@Exclude
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "wallet_id")
 	private Wallet wallet;
 

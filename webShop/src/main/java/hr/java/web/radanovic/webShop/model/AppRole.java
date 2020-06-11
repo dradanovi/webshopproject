@@ -1,6 +1,5 @@
 package hr.java.web.radanovic.webShop.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,9 +22,7 @@ public class AppRole {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_seq")
 	@SequenceGenerator(name = "roles_seq", sequenceName = "roles_seq", initialValue=1, allocationSize = 1)
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "authority")
 	@Enumerated(EnumType.STRING)
 	private Authorities authority;
 	

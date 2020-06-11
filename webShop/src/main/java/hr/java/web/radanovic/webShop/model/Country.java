@@ -23,7 +23,6 @@ public class Country {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "country_seq")
 	@SequenceGenerator(name = "country_seq", sequenceName = "country_seq", initialValue=1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
 	@Column(name = "name")
 	@Enumerated(EnumType.STRING)

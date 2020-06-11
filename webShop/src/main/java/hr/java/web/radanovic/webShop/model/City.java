@@ -24,13 +24,11 @@ public class City {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CITY_SEQ")
 	@SequenceGenerator(name = "CITY_SEQ", sequenceName = "CITY_SEQ", initialValue = 1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "name")
 	private String name;
 	@Column(name = "zip_code")
 	private String zipCode;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "country_id")
 	private Country country;
 

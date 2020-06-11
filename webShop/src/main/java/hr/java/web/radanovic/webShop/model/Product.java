@@ -30,29 +30,23 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_SEQ")
 	@SequenceGenerator(name = "PRODUCT_SEQ", sequenceName = "PRODUCT_SEQ", initialValue = 1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "name")
 	private String name;
 	@Column(name = "product_type")
 	private String category;
-	@Column(name = "cost")
 	private BigDecimal cost;
-	@Column(name = "currency")
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
 	@Column(name = "available")
 	private Integer numberAvailable;
 	@Column(name = "date_listed")
 	private LocalDateTime date;
-	@Column(name = "description")
 	private String description;
-	@Column(name = "enabled")
 	private boolean enabled;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "city_id")
 	private City city;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "seller_id")
 	private Seller seller;
 

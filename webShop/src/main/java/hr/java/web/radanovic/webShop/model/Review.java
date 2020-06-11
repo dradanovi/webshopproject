@@ -1,7 +1,6 @@
 package hr.java.web.radanovic.webShop.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,19 +23,16 @@ public class Review {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REVIEWS_SEQ")
 	@SequenceGenerator(name = "REVIEWS_SEQ", sequenceName = "REVIEWS_SEQ", initialValue = 1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private AppUser user;
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id")
 	private Product product;
 	@Exclude
-	@Column(name = "message")
 	private String message;
 	@Exclude
-	@Column(name = "grade")
 	private Long grade;
 
 	/**

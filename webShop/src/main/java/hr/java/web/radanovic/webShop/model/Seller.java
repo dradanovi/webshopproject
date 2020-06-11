@@ -34,18 +34,15 @@ public class Seller {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SELLERS_SEQ")
 	@SequenceGenerator(name = "SELLERS_SEQ", sequenceName = "SELLERS_SEQ", initialValue = 1, allocationSize = 1)
 	@Exclude
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "rating", precision = 1, scale = 1)
 	private Double rating;
 	@Column(name = "date_created")
 	private LocalDateTime date;
-	@Column(name = "reviews")
 	private Long reviews;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_id")
 	private AppUser user;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "card_id")
 	private CardInfo card;
 

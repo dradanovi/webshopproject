@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,16 +28,12 @@ public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERS_SEQ")
 	@SequenceGenerator(name = "USERS_SEQ", sequenceName = "USERS_SEQ", initialValue = 1, allocationSize = 1)
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "username")
 	private String username;
-	@Column(name = "password")
 	private String password;
-	@Column(name = "enabled")
 	private boolean enabled;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "USERS_AUTHORITY", joinColumns = @JoinColumn(name = "USERS_ID", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "id"))
 	private Set<AppRole> roles = new HashSet<>();
 

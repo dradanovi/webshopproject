@@ -1,7 +1,6 @@
 package hr.java.web.radanovic.webShop.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,12 +25,10 @@ public class Wallet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "WALLET_SEQ")
 	@SequenceGenerator(name = "WALLET_SEQ", sequenceName = "WALLET_SEQ", initialValue = 1, allocationSize = 1)
-	@Column(name = "id")
 	private Long id;
-	@Column(name = "currency")
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_id")
 	private AppUser user;
 	
